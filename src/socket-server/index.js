@@ -20,7 +20,6 @@ io.on('connection', (socket) => {
 
   socket.on('Vu', (msg) => {
     io.emit('Vu', msg);
-    console.log('message: ' + msg);
   });
 
   socket.on('Giang', (msg) => {
