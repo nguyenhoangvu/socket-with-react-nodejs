@@ -9,22 +9,11 @@ app.get('/', (req, res) => {
   // res.send('<h1>Hello world</h1>');
 });
 
-// app.use(express.static(__dirname + '/client'));
-// app.get('/', function(req, res){
-//   res.sendFile('index.html');
-// });
-
-
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('Vu', (msg) => {
-    io.emit('Vu', msg);
-  });
-
-  socket.on('Giang', (msg) => {
-    io.emit('Giang', msg);
-    console.log('message: ' + msg);
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
   });
 
   socket.on('disconnect', () => {

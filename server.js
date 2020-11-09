@@ -3,18 +3,31 @@ const app = express();
 const bodyParser = require('body-parser');
 var path = require('path');
 var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+let fs = require('fs')
+var router = require('./src/routes/routes')
 
 const port = 8000;
-// var http = require('http').Server(app);
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './src/client/', 'index.html'));
-  // res.send('<h1>Hello world</h1>');
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var router = require('./src/routes/routes')
 app.use('/src', router)
 
-app.listen(port);
+http.listen(port);
