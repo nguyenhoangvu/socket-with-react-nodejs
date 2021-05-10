@@ -9,8 +9,8 @@ const db = require('../db/db');
 module.exports = {
   async create(req, res) {
     try {
-      let sql = 'INSERT INTO test (test) VALUES ($1)';
-      await db.query(sql, [req.body.test], (err, result) => {
+      let sql = 'INSERT INTO chat (room_id, message) VALUES ($1,$2)';
+      await db.query(sql, [req.body.room_id, req.body.message], (err, result) => {
         if (err) {
           return res.status(400).send({
             msg: err
@@ -27,8 +27,8 @@ module.exports = {
   },
   async get(req, res) {
     try {
-      let sql = 'SELECT * FROM test';
-      await db.query(sql, (err, result) => {
+      let sql = 'SELECT message FROM chat WHERE room_id = $1';
+      await db.query(sql, [req.params.room_id], (err, result) => {
         if (err) {
           return res.status(400).send({
             msg: err
@@ -37,18 +37,10 @@ module.exports = {
         res.json(result.rows);
       })
     } catch (err) {
-      switch (err) {
-        case ('UserNotExist'):
-          res.status(405).send({
-            msg: 'User does not exist',
-          })
-          break;
-        default:
-          res.status(500).send({
-            msg: 'Server error!',
-            error: err,
-          })
-      }
+      res.status(500).send({
+        msg: 'Server error!',
+        error: err,
+      })
     }
   }
 }

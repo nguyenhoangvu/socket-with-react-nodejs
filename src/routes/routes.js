@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const testController = require('../controllers/test');
+const chatController = require('../controllers/chat-log');
 
-router.post('/create', testController.create)
-router.get('/get', testController.get)
+router.post('/create', chatController.create)
+router.get('/get/:room_id', chatController.get)
 
 module.exports = router;
